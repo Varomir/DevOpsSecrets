@@ -1,4 +1,4 @@
-import unittest, re, subprocess
+import unittest, urllib, re, subprocess
 
 class TestEnv(unittest.TestCase):
 
@@ -16,6 +16,16 @@ class TestEnv(unittest.TestCase):
 		shortVersion = re.search(pattern, version).groups()[0]
 		print('  CHECK sbt version =', shortVersion)
 		self.assertEqual(shortVersion, '0.13.15')
+
+	def test_website(self):
+		response = urllib.urlopen("http://www.python.org")
+		status_code = response.getcode()
+		print('  CHECK status code = ', status_code)
+		html = response.read(3000)
+		pattern = '<title>(.*?)</title>'
+		title = re.search(pattern, html).groups()[0]
+		self.assertEqual(status_code, 200)
+		self.assertEqual(title, 'Welcome to Python.org')
 		
 if __name__ == '__main__':
 	unittest.main()
